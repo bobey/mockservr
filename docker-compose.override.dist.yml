@@ -1,21 +1,30 @@
 version: "3"
 
 services:
-  mockservr:
-    command: npm run start-dev
-    volumes:
-      - "./app:/usr/src/app"
-    ports:
-      - "8085:80"
-      - "8045:4580"
+    mockservr:
+        command: npm run start-dev
+        volumes:
+            - "./app:/usr/src/app"
+        ports:
+            - "8085:80"
+            - "8045:4580"
 
-  webpack:
-    image: node:11-alpine
-    environment:
-      - "API_URL=http://localhost:8045/api/"
-    working_dir: /usr/src/app/gui
-    command: yarn start
-    volumes:
-      - "./app:/usr/src/app"
-    ports:
-      - "8086:8086"
+    webpack:
+        image: node:11-alpine
+        environment:
+            - "API_URL=http://localhost:8045/api/"
+        working_dir: /usr/src/app/gui
+        command: yarn start
+        volumes:
+            - "./app:/usr/src/app"
+        ports:
+            - "8086:8086"
+
+    storybook:
+        image: node:10-alpine
+        working_dir: /usr/src/storybook
+        volumes:
+            - ./app/gui:/usr/src/storybook:rw,cached
+        command: yarn run storybook
+        ports:
+            - "9001:9001"
